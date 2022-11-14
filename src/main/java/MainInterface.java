@@ -170,7 +170,6 @@ public class MainInterface extends JDialog {
     }
 
     private void onCancel() {
-        // add your code here if necessary
         saveConfigs();
         if(runningCron != null) runningCron.stop();
         dispose();
