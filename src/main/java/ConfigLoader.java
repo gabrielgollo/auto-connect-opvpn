@@ -26,7 +26,6 @@ public class ConfigLoader {
     void saveConfigs(JSONObject json) {
         try{
             FileWriter file = new FileWriter(completeFilePath);
-            System.out.println(json);
             file.write(json.toString());
             file.close();
         } catch (Exception error){

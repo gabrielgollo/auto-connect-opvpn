@@ -1,16 +1,23 @@
 import java.io.File;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 
 public class CronService {
-    public static void StartVpnAuth(String username, String password, String vpnHost, String opVpnFileLocation, String secretOTP){
+    public static void StartVpnAuth(VpnConfigs configs){
         try{
-            connectToVpn(username, password, vpnHost, opVpnFileLocation, secretOTP);
+            String username = configs.username();
+            String password = configs.password();
+            String vpnHost = configs.vpnHost();
+            String opVpnFileLocation = configs.opVpnFileLocation();
+            String secretOTP = configs.secretOtp();
+
+            connectToVpn(username, password, opVpnFileLocation, secretOTP);
             PingManager pingManager1 = new PingManager(vpnHost);
             boolean isAlive = pingManager1.ping();
             System.out.println("Connection is "+isAlive);
 
             if(!isAlive){
-                connectToVpn(username, password, vpnHost, opVpnFileLocation, secretOTP);
+                connectToVpn(username, password,  opVpnFileLocation, secretOTP);
             }
 
             System.out.println("Initializing job");
@@ -20,7 +27,7 @@ public class CronService {
         }
     }
 
-    static void connectToVpn(String username, String password, String vpnHost, String opVpnFileLocation, String secretOTP){
+    static void connectToVpn(String username, String password, String opVpnFileLocation, String secretOTP){
         Totp otp = new Totp();
         String token = otp.getOTPCode(secretOTP);
         System.out.println(token);
@@ -35,7 +42,7 @@ public class CronService {
 
             File locationForCmd = new File(location.getAbsolutePath()+"\\");
 
-            PrintWriter writer = new PrintWriter(fileLocation, "UTF-8");
+            PrintWriter writer = new PrintWriter(fileLocation, StandardCharsets.UTF_8);
             writer.println(username);
             writer.print(password+token);
             writer.close();

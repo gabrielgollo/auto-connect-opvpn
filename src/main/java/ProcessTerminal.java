@@ -26,7 +26,7 @@ public class ProcessTerminal {
         printStream(inputStream);
         printStream(errorStream);
 
-        boolean isFinished = process.waitFor(30, TimeUnit.SECONDS);
+        boolean isFinished = process.waitFor(5, TimeUnit.SECONDS);
         outputStream.flush();
         outputStream.close();
 
