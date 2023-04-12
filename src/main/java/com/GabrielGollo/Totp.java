@@ -1,3 +1,5 @@
+package com.GabrielGollo;
+
 import org.apache.commons.codec.binary.Base32;
 import static org.apache.commons.codec.binary.Hex.encodeHexString;
 
@@ -20,7 +22,7 @@ public class Totp {
     Totp(){
         millisToGenerateCode = 30000;
         base32 = new Base32();
-;    }
+    }
     public String getOTPCode(String key){
         long step = getStep();
 

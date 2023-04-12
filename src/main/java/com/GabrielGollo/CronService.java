@@ -1,9 +1,13 @@
+package com.GabrielGollo;
+
 import java.io.File;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 
 public class CronService {
-    public static void StartVpnAuth(VpnConfigs configs){
+    Process runningBuilder;
+    Thread thread1;
+    public void StartVpnAuth(VpnConfigs configs){
         try{
             String username = configs.username();
             String password = configs.password();
@@ -27,7 +31,7 @@ public class CronService {
         }
     }
 
-    static void connectToVpn(String username, String password, String opVpnFileLocation, String secretOTP){
+    private void connectToVpn(String username, String password, String opVpnFileLocation, String secretOTP){
         Totp otp = new Totp();
         String token = otp.getOTPCode(secretOTP);
         System.out.println(token);
@@ -37,16 +41,28 @@ public class CronService {
 
         try{
             File location = new File("");
-            String fileLocation = location.getAbsolutePath()+ "\\ovpn_user.txt";
+            String fileLocation = location.getAbsolutePath()+ "\\src\\ovpn_user.txt";
             String commandLine = "openvpn --config \""+opVpnFileLocation+"\" --auth-user-pass \""+fileLocation+"\"";
 
             File locationForCmd = new File(location.getAbsolutePath()+"\\");
 
             PrintWriter writer = new PrintWriter(fileLocation, StandardCharsets.UTF_8);
             writer.println(username);
-            writer.print(password+token);
+            writer.print(passwordWithToken);
             writer.close();
-            ProcessTerminal.runCommand(locationForCmd, commandLine);
+            if(runningBuilder == null) {
+                thread1 = new Thread(() -> {
+                    try {
+                        runningBuilder = ProcessTerminal.runCommand(locationForCmd, commandLine);
+                    } catch(Exception e) {
+                        e.printStackTrace();
+                    }
+                });
+
+                thread1.start();
+                thread1.wait();
+            }
+
 
         } catch (Exception e) {
             System.out.println("Erro ao tentar abrir conexão");

@@ -1,3 +1,5 @@
+package com.GabrielGollo;
+
 import org.json.JSONObject;
 
 public class ConfigManager {
@@ -9,7 +11,9 @@ public class ConfigManager {
 
     String get(String key){
         try{
-            return _config.getString(key);
+            String value = _config.getString(key);
+            if(!(value instanceof String)) return "";
+            return value;
         } catch (Exception error){
             return "";
         }

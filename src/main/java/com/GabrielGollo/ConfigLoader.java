@@ -1,3 +1,5 @@
+package com.GabrielGollo;
+
 import org.json.JSONObject;
 
 import java.io.File;
@@ -11,8 +13,6 @@ public class ConfigLoader {
 
     JSONObject getConfigs(){
         try{
-
-
             byte[] encoded = Files.readAllBytes(Paths.get(completeFilePath));
             String fileContent = new String(encoded);
 
@@ -32,11 +32,5 @@ public class ConfigLoader {
             System.out.println("Failed to save File!");
         }
 
-    }
-
-    public static void main(String[] args) {
-        ConfigLoader configLoader = new ConfigLoader();
-        JSONObject configs = configLoader.getConfigs();
-        System.out.println(configs.toString());
     }
 }

@@ -1,3 +1,5 @@
+package com.GabrielGollo;
+
 import javax.swing.*;
 import java.awt.event.*;
 
@@ -15,7 +17,10 @@ public class MainInterface extends JDialog {
 
     public MainInterface(VpnConfigs initialConfigurations, EventHandler _eventHandler) {
         eventHandler = _eventHandler;
-        vpnHostField.setText(initialConfigurations.vpnHost());
+
+        String vpnHost = initialConfigurations.vpnHost();
+
+        vpnHostField.setText(vpnHost);
         usernameTextField.setText(initialConfigurations.username());
         passwordTextField.setText(initialConfigurations.password());
         secretOtpCode.setText(initialConfigurations.secretOtp());

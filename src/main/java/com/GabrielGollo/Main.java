@@ -1,3 +1,5 @@
+package com.GabrielGollo;
+
 import org.json.JSONObject;
 
 public class Main {
@@ -17,12 +19,15 @@ public class Main {
         return new VpnConfigs(vpnHost, username, password, opVpnFileLocation, secretOtp);
     }
 
-
-
     public static void main(String[] args) {
-        EventHandler eventsHandler = new EventHandler();
+        // starts getting configs
         VpnConfigs initialConfiguration = getInitialConfiguration();
+        System.out.println(initialConfiguration);
 
+        // setup events
+        EventHandler eventsHandler = new EventHandler();
+
+        // start interface
         MainInterface dialog = new MainInterface(initialConfiguration, eventsHandler);
         dialog.pack();
         dialog.setVisible(true);

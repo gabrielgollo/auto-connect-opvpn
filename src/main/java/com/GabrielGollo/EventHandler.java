@@ -1,3 +1,5 @@
+package com.GabrielGollo;
+
 import it.sauronsoftware.cron4j.Scheduler;
 import org.json.JSONObject;
 
@@ -6,7 +8,7 @@ import java.util.concurrent.Callable;
 
 public class EventHandler {
     Scheduler runningCron;
-
+    CronService cronService = new CronService();
     private boolean isCronRunning () {
         if(runningCron==null){
             return false;
@@ -37,8 +39,9 @@ public class EventHandler {
         if(!(username.isBlank() || password.isBlank() || vpnHost.isBlank() || opVpnFileLocation.isBlank()) && !cronIsRunning) {
             try{
                 CronInfra cronJob = new CronInfra();
+                cronService.StartVpnAuth(configurations);
                 Callable<Void> service = () -> {
-                    CronService.StartVpnAuth(configurations);
+                    cronService.StartVpnAuth(configurations);
                     return null;
                 };
                 mainInterface.disableStartButton();
@@ -57,6 +60,11 @@ public class EventHandler {
     public void onCancel(MainInterface mainInterface, VpnConfigs mainInterfaceConfigs) {
         saveConfigs(mainInterfaceConfigs);
         mainInterface.enableStartButton();
+        if(cronService.runningBuilder != null) {
+            cronService.runningBuilder.destroy();
+            cronService.thread1.interrupt();
+            ProcessTerminal.killAppByName("openvpn.exe");
+        }
         if(runningCron != null) runningCron.stop();
         mainInterface.dispose();
         System.exit(0);
